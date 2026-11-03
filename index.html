@@ -142,6 +142,9 @@ window.MathJax = {
   .answer .flex-fill { flex: 1; margin-left: 4px; min-width: 0; overflow-x: auto; overflow-y: hidden; }
   .answer .correct input:disabled + .lbl { color: var(--ok-dark); font-weight: 600; margin-right: 5px; }
   .answer .incorrect input:disabled + .lbl { color: var(--bad-dark); font-weight: 600; margin-right: 5px; }
+  #bank .answer input:disabled + .lbl { color: #6a737b; }
+  #bank .answer .correct input:disabled + .lbl { color: var(--ok-dark); }
+  #bank .bank .formulation { padding-bottom: 0; }
   .answer .icon { margin-left: 6px; flex: 0 0 auto; font-weight: 700; }
   .answer .icon.ok { color: #306e2d; }
   .answer .icon.bad { color: #b62c1d; }
@@ -274,6 +277,7 @@ window.MathJax = {
         <span>Zapnout časový limit 10 min.</span>
       </label>
       <button class="btn btn-primary" id="startBtn">Zahájit pokus</button>
+      <p style="margin:20px 0 0"><button class="btn btn-secondary" id="bankBtn" style="white-space:normal;line-height:20px">Zobrazit všechny správné odpovědi</button></p>
     </div>
     <div id="prevAttempts" hidden>
       <h3 class="h">Přehled vašich předchozích pokusů</h3>
@@ -288,6 +292,14 @@ window.MathJax = {
       <p style="text-align:center;margin:0 0 8px">Správně zodpovězeno celkem: <span id="totalStats"></span> úloh</p>
       <p style="text-align:center;margin:16px 0 24px"><a id="clearHistory">Smazat historii pokusů</a></p>
     </div>
+  </div>
+
+  <div id="bank" hidden>
+    <p style="margin:0 0 24px"><a id="bankBackTop">← Zpět na test</a></p>
+    <h2 style="font-size:30px;line-height:36px;font-weight:700;margin:0 0 8px">Všechny otázky se správnými odpověďmi</h2>
+    <p style="margin:0 0 24px">Celkem <span id="bankCount"></span> otázek. Správná odpověď je vždy zeleně označena ✔.</p>
+    <div id="bankQuestions"></div>
+    <p style="margin:0 0 32px"><a id="bankBackBottom">← Zpět na test</a></p>
   </div>
 
   <div id="attempt" hidden>
@@ -611,8 +623,8 @@ let timerId = null;
 let timerHidden = false;
 
 function show(view) {
-  for (const v of ["view", "attempt", "summary", "review"]) $(v).hidden = v !== view;
-  $("navblock").hidden = view === "view";
+  for (const v of ["view", "attempt", "summary", "review", "bank"]) $(v).hidden = v !== view;
+  $("navblock").hidden = view === "view" || view === "bank";
   window.scrollTo(0, 0);
 }
 
@@ -682,26 +694,27 @@ function gradeText(it, st) {
 
 function questionHTML(it, idx, mode) {
   const Q = QUESTIONS[it.qi];
-  const st = itemState(it);
-  const locked = mode === "review" || it.checked;
+  const bank = mode === "bank";
+  const st = bank ? "bank" : itemState(it);
+  const locked = bank || mode === "review" || it.checked;
   const name = `q${idx}`;
   const flagSvg = `<svg viewBox="0 0 ${it.flagged ? 512 : 448} 512" aria-hidden="true"><path d="${it.flagged ? FLAG_FILLED : FLAG_PATH}"/></svg>`;
-  const flagHTML = mode === "review"
+  const flagHTML = bank ? "" : mode === "review"
     ? (it.flagged ? `<div class="questionflag flagged"><a>${flagSvg}Úloha s vlaječkou</a></div>` : ``)
     : `<div class="questionflag${it.flagged ? " flagged" : ""}"><a role="button" tabindex="0" data-flag="${idx}" title="Označení testové úlohy vlaječkou pro další použití">${flagSvg}${it.flagged ? "Odebrat vlaječku" : "Úloha s vlaječkou"}</a></div>`;
 
   let html = `<div class="que multichoice ${st}" id="question-${idx}">
     <div class="info">
       <h3 class="no">Úloha <span class="qno">${idx + 1}</span></h3>
-      <div class="state">${stateText(st)}</div>
-      <div class="grade">${gradeText(it, st)}</div>
+      ${bank ? "" : `<div class="state">${stateText(st)}</div>
+      <div class="grade">${gradeText(it, st)}</div>`}
       ${flagHTML}
     </div>
     <div class="content">
       <div class="formulation">
         <div class="qtext">${Q.note ? `<p class="note-orig">${Q.note}</p>` : ""}<p>${Q.q}</p>${Q.img ? `<img src="${Q.img}" alt="">` : ""}</div>
         <fieldset class="ablock">
-          <legend>Vyberte jednu z nabízených možností:</legend>
+          ${bank ? "" : `<legend>Vyberte jednu z nabízených možností:</legend>`}
           <div class="answer">`;
   it.order.forEach((oi, k) => {
     const isPicked = it.picked === oi;
@@ -725,7 +738,7 @@ function questionHTML(it, idx, mode) {
   }
   html += `</fieldset></div>`;
 
-  if (locked) {
+  if (locked && !bank) {
     const right = Q.o[Q.c];
     let fb = "";
     if (st === "correct") fb = `<div>Vaše odpověď je správná.</div>`;
@@ -897,6 +910,22 @@ $("finishReview").addEventListener("click", renderView);
 
 $("useTimer").addEventListener("change", () => { $("limitInfo").hidden = !$("useTimer").checked; });
 $("startBtn").addEventListener("click", startAttempt);
+let bankRendered = false;
+function renderBank() {
+  if (!bankRendered) {
+    $("bankCount").textContent = QUESTIONS.length;
+    const wrap = $("bankQuestions");
+    wrap.innerHTML = QUESTIONS.map((Q, qi) =>
+      questionHTML({ qi, order: Q.o.map((_, i) => i), picked: null, flagged: false }, qi, "bank")
+        .replace(`id="question-${qi}"`, `id="bq-${qi}"`)).join("");
+    typeset(wrap);
+    bankRendered = true;
+  }
+  show("bank");
+}
+$("bankBtn").addEventListener("click", renderBank);
+$("bankBackTop").addEventListener("click", renderView);
+$("bankBackBottom").addEventListener("click", renderView);
 $("clearHistory").addEventListener("click", () => {
   $("modalTitle").textContent = "Smazat historii pokusů";
   $("modalBody").innerHTML = `<p style="margin:0">Opravdu chcete smazat všechny uložené pokusy? Tuto akci nelze vrátit.</p>`;
