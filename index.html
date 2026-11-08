@@ -3,280 +3,54 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Test 2 – Metalická vedení a optická vlákna (procvičování)</title>
+<title>Cvičné testy</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
 <script>
 window.MathJax = {
   tex: { inlineMath: [['\\(', '\\)']] },
   svg: { fontCache: 'global' },
   startup: { typeset: false }
 };
+const TESTS = [];
+function registerTest(test) { TESTS.push(test); }
 </script>
 <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js"></script>
-<style>
-  :root {
-    --teal: #00a499;
-    --text: #1d2125;
-    --qtext: #001a1e;
-    --secondary: #6c757d;
-    --danger: #ca3120;
-    --ok-dark: #2d682b;
-    --bad-dark: #b42c1d;
-  }
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    font-family: "Fira Sans", Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    line-height: 24px;
-    color: var(--text);
-    background: #fff;
-  }
-  a { color: var(--teal); text-decoration: none; cursor: pointer; }
-  a:hover { text-decoration: underline; }
 
-  .navbar {
-    position: fixed; top: 0; left: 0; right: 0; height: 81px; z-index: 1030;
-    background: #fff;
-    box-shadow: rgba(93, 76, 65, 0.1) 0 0 15px 0;
-  }
-  #page { margin-top: 80px; padding: 0 64px; }
-  .page-header { padding: 16px 0; }
-  h1 { font-size: 38.2px; line-height: 45.84px; font-weight: 700; margin: 0 0 8px; }
-
-  .btn {
-    display: inline-block;
-    font: inherit; font-size: 16px; line-height: 16px; font-weight: 400;
-    padding: 11.2px 24px 9.6px;
-    border: 1px solid transparent; border-radius: 8px;
-    cursor: pointer; text-align: center; white-space: nowrap;
-  }
-  .btn-primary { color: #fff; background: var(--teal); border-color: var(--teal); }
-  .btn-primary:hover { background: #008b82; border-color: #008b82; }
-  .btn-secondary { color: #fff; background: var(--secondary); border-color: var(--secondary); }
-  .btn-secondary:hover { background: #5c636a; border-color: #5c636a; }
-
-  #quiz-timer-wrapper {
-    display: flex; justify-content: flex-end; align-items: stretch;
-    position: sticky; top: 85px; z-index: 1020;
-    margin: 0 0 8px;
-  }
-  #quiz-timer {
-    padding: 4px 8px;
-    border: 1px solid var(--danger);
-    background: #fff;
-    display: flex; align-items: center; gap: 4px;
-  }
-  #quiz-timer.hidden-time #quiz-time-left, #quiz-timer.hidden-time .lbl { visibility: hidden; }
-  #toggle-timer { margin-left: 4px; }
-  #quiz-timer.t0 { background: #ca3120; color: #fff; }
-  #quiz-timer.t1 { background: #d73422; color: #fff; }
-  #quiz-timer.t2 { background: #dd3d2b; }
-  #quiz-timer.t3 { background: #e04938; }
-  #quiz-timer.t4 { background: #e25546; }
-  #quiz-timer.t5 { background: #e46153; }
-  #quiz-timer.t6 { background: #e66d60; }
-  #quiz-timer.t7 { background: #e8796d; }
-  #quiz-timer.t8 { background: #ea867a; }
-  #quiz-timer.t9 { background: #ec9288; }
-  #quiz-timer.t10 { background: #ee9e95; }
-
-  .que {
-    display: flex; flex-direction: column;
-    margin: 0 0 40px; padding: 0;
-    border-bottom: 1px solid #ddd;
-  }
-  .que .info {
-    display: flex; align-items: flex-end; flex-wrap: wrap;
-    padding: 8px 0; border-radius: 2px;
-  }
-  .que .info .no {
-    font-size: 26px; line-height: 26px; font-weight: 300;
-    margin: 5px 50px 5px 0;
-  }
-  .que .info .no .qno { font-weight: 700; }
-  .que .info .state, .que .info .grade, .que .info .questionflag {
-    font-size: 15px; line-height: 22.5px; font-weight: 300; color: #000;
-    margin: 5px 50px 5px 0; display: flex; align-items: center;
-  }
-  .questionflag a { display: flex; align-items: center; color: var(--teal); }
-  .questionflag a:hover { text-decoration: none; }
-  .questionflag svg { width: 13px; height: 16px; margin-right: 4px; }
-  .questionflag.flagged svg path { fill: #ca3120; }
-  .que .content { max-width: 546px; width: 100%; }
-  .que .formulation {
-    color: var(--qtext);
-    padding: 16px 0; margin: 0 0 16px;
-    border-radius: 8px;
-  }
-  .qtext { margin: 0 0 24px; }
-  .qtext p { margin: 0 0 8px; }
-  .qtext img { max-width: 100%; height: auto; display: block; margin: 8px 0; }
-  .ablock { margin: 11.2px 0 4.8px; padding: 0; border: 0; min-width: 0; }
-  .ablock legend { font-size: 16px; line-height: 19.2px; margin: 0 0 8px; padding: 0; }
-  .answer > div { display: flex; margin: 4px 0; padding: 5px 0; }
-  .answer input[type=radio] {
-    position: absolute; opacity: 0; width: 0; height: 0; margin: 0;
-  }
-  .answer .lbl {
-    position: relative; display: flex; cursor: pointer;
-    margin-left: 16px;
-  }
-  .answer .lbl::before {
-    content: ""; flex: 0 0 20px; width: 20px; height: 20px;
-    margin: 2px 10px 0 0;
-    border: 1px solid #000; border-radius: 20px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 13px; line-height: 1; font-weight: 700; color: #fff;
-  }
-  .answer .lbl:hover::before { background: #ddd; }
-  .answer input:checked + .lbl::before { background: var(--teal); border-color: var(--teal); content: "✓"; }
-  .answer input:focus-visible + .lbl::before { outline: 2px solid #0f6cbf; outline-offset: 2px; }
-  .answer input:disabled + .lbl { color: #b8b8b8; cursor: auto; }
-  .answer input:disabled + .lbl::before { background: #ddd; border-color: #ddd; }
-  .answer input:disabled:checked + .lbl::before { background: #9aa1a8; border-color: #9aa1a8; content: "✓"; }
-  .answer .answernumber { flex: 0 0 24px; width: 24px; }
-  .answer .flex-fill { flex: 1; margin-left: 4px; min-width: 0; overflow-x: auto; overflow-y: hidden; }
-  .answer .correct input:disabled + .lbl { color: var(--ok-dark); font-weight: 600; margin-right: 5px; }
-  .answer .incorrect input:disabled + .lbl { color: var(--bad-dark); font-weight: 600; margin-right: 5px; }
-  #bank .answer input:disabled + .lbl { color: #6a737b; }
-  #bank .answer .correct input:disabled + .lbl { color: var(--ok-dark); }
-  #bank .bank .formulation { padding-bottom: 0; }
-  .answer .icon { margin-left: 6px; flex: 0 0 auto; font-weight: 700; }
-  .answer .icon.ok { color: #306e2d; }
-  .answer .icon.bad { color: #b62c1d; }
-  .clearchoice { margin: 2px 0 0 16px; }
-  .clearchoice a { font-size: 16px; }
-  .im-controls { margin: .5em 0 16px; }
-  .que .outcome {
-    padding: 1rem; margin: 0 0 1rem;
-    border-radius: 0.5rem;
-    color: #fff;
-  }
-  .que.correct .outcome { background: var(--ok-dark); }
-  .que.incorrect .outcome, .que.notanswered .outcome { background: var(--bad-dark); }
-  .que .outcome p, .que .outcome div { margin: 0 0 .5em; }
-  .que .outcome div:last-child { margin-bottom: 0; }
-  .note-orig { font-size: 14px; color: #6a737b; font-style: italic; margin: 0 0 8px; }
-
-  .submitbtns { display: flex; justify-content: flex-end; margin: 0 0 16px; }
-
-  .block {
-    background: #fff; border-radius: 8px; margin: 0 0 16px;
-  }
-  .block .card-body { padding: 16px; }
-  .block h3 { font-size: 20px; line-height: 24px; font-weight: 700; margin: 0 0 8px; display: inline; }
-  .qn_buttons { margin-top: 16px; display: flex; flex-wrap: wrap; }
-  .qnbutton {
-    position: relative; display: block;
-    width: 33px; height: 33px; margin: 0 6px 6px 0;
-    background: #fff; color: #000;
-    text-align: center; line-height: 35px; font-weight: 400;
-    text-decoration: none !important;
-    overflow: hidden;
-  }
-  .qnbutton .thispageholder {
-    position: absolute; inset: 0;
-    border: 1px solid #dee2e6;
-  }
-  .qnbutton.thispage .thispageholder { border-color: #000; }
-  .qnbutton .trafficlight { position: absolute; left: 0; right: 0; bottom: 0; height: 0; }
-  .qnbutton.answersaved .trafficlight { height: 13px; background: #dee2e6; }
-  .qnbutton.correct { background: #dff4d8; }
-  .qnbutton.incorrect, .qnbutton.notanswered { background: #ffdddd; }
-  .qnbutton.correct .trafficlight, .qnbutton.incorrect .trafficlight, .qnbutton.notanswered .trafficlight {
-    height: 13px; display: flex; align-items: center; justify-content: center;
-    font-size: 11px; line-height: 13px; font-weight: 700;
-  }
-  .qnbutton.correct .trafficlight { color: #357a32; }
-  .qnbutton.correct .trafficlight::after { content: "✓"; }
-  .qnbutton.incorrect .trafficlight, .qnbutton.notanswered .trafficlight { color: #ca3120; }
-  .qnbutton.incorrect .trafficlight::after, .qnbutton.notanswered .trafficlight::after { content: "✕"; }
-  .qnbutton.flagged::after {
-    content: ""; position: absolute; top: 0; right: 0;
-    border-style: solid; border-width: 0 9px 9px 0;
-    border-color: transparent #ca3120 transparent transparent;
-  }
-  .qnbutton .num { position: relative; display: block; line-height: 30px; }
-  .othernav { margin-top: 8px; }
-
-  .activity-info { margin: 0 0 16px; }
-  .activity-dates { border-left: 0; padding: 0; margin: 0 0 16px; }
-  .quizinfo p { margin: 0 0 8px; text-align: center; }
-  .quizattempt { text-align: center; margin: 24px 0 32px; }
-  .form-check { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 0 20px; }
-  .form-check input { width: 18px; height: 18px; accent-color: var(--teal); margin: 0; }
-  h3.h { font-size: 23.4px; font-weight: 700; line-height: 28px; margin: 24px 0 12px; }
-
-  table.generaltable { width: 100%; border-collapse: collapse; border-top: 1px solid #dee2e6; margin: 0 0 16px; }
-  .generaltable th, .generaltable td { padding: .75rem .6rem; border-top: 1px solid #dee2e6; text-align: left; vertical-align: top; }
-  .generaltable thead th { border-bottom: 2px solid #dee2e6; font-weight: 700; }
-  .generaltable tbody tr:nth-of-type(odd) { background: rgba(0,0,0,.03); }
-  .table-wrap { overflow-x: auto; }
-
-  table.quizreviewsummary { width: 100%; border-collapse: collapse; margin: 0 0 24px; border: 1px solid #dee2e6; }
-  table.quizreviewsummary th { padding: .9rem 1rem; font-weight: 700; text-align: right; width: 9em; vertical-align: top; }
-  table.quizreviewsummary td { padding: .9rem 1rem; text-align: left; }
-  table.quizreviewsummary tr + tr th, table.quizreviewsummary tr + tr td { border-top: 1px solid #dee2e6; }
-  table.quizreviewsummary tr:nth-child(even) { background: #f5f5f5; }
-
-  .summary-actions { text-align: center; margin: 16px 0; }
-  .summary-actions p { margin: 0 0 12px; }
-  .submitbtns-center { display: flex; justify-content: center; margin: 24px 0; }
-
-  .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.5); z-index: 1050; display: flex; align-items: flex-start; justify-content: center; padding: 28px 8px; }
-  .modal-content { background: #fff; border-radius: 8px; width: 100%; max-width: 400px; margin-top: 60px; box-shadow: 0 .5rem 1rem rgba(0,0,0,.15); }
-  .modal-header { padding: 16px; display: flex; justify-content: space-between; align-items: center; }
-  .modal-header h5 { margin: 0; font-size: 20px; line-height: 24px; font-weight: 700; }
-  .modal-header .close { background: none; border: 0; font-size: 24px; line-height: 1; cursor: pointer; color: #000; opacity: .6; padding: 0 4px; }
-  .modal-body { padding: 0 16px 16px; }
-  .modal-footer { padding: 0 16px 16px; display: flex; gap: 8px; justify-content: flex-start; }
-
-  [hidden] { display: none !important; }
-
-  mjx-container[jax="SVG"] { font-size: 108% !important; }
-  .qtext mjx-container[jax="SVG"] { font-size: 100% !important; }
-
-  @media (max-width: 767.98px) {
-    #page { padding: 0 28px; }
-    h1 { font-size: 28px; line-height: 33.6px; }
-    .que .info {
-      background: #f8f9fa;
-      padding: 20px; border-radius: 8px;
-    }
-    .que .info .no { width: 100%; margin-right: 0; }
-    .que .info .state, .que .info .grade, .que .info .questionflag { margin-right: 20px; }
-    .que .content { max-width: none; }
-    .block .card-body { padding: 16px; }
-    #prevAttempts .generaltable { font-size: 15px; }
-    #prevAttempts .generaltable th, #prevAttempts .generaltable td { padding: .6rem .35rem; }
-  }
-</style>
+<script src="tests/test-2.js"></script>
+<script src="tests/test-3.js"></script>
 </head>
 <body>
 <nav class="navbar" aria-label="Navigace stránek"></nav>
 
 <div id="page">
   <header class="page-header">
-    <h1 id="courseTitle">Test 2 – Metalická vedení a optická vlákna (procvičování)</h1>
+    <p class="breadcrumb" id="breadcrumb" hidden><a href="#">← Všechny testy</a></p>
+    <h1 id="pageTitle">Cvičné testy</h1>
   </header>
 
-  <div id="view">
+  <div id="course">
+    <section class="course-section">
+      <h3>Testy</h3>
+      <ul class="activity-list" id="activityList"></ul>
+    </section>
+  </div>
+
+  <div id="view" hidden>
     <div class="activity-dates">
       <div><strong>Otevřeno:</strong> kdykoliv</div>
     </div>
     <div class="quizinfo">
       <p>Povolené pokusy: neomezeno</p>
-      <p>Otázek v pokusu: 5 (náhodný výběr z <span id="bankSize"></span>)</p>
-      <p id="limitInfo">Časový limit: 10 min.</p>
+      <p>Otázek v pokusu: <span id="perAttempt"></span> (náhodný výběr z <span id="bankSize"></span>)</p>
+      <p id="limitInfo">Časový limit: <span class="limitMin"></span> min.</p>
     </div>
     <div class="quizattempt">
       <label class="form-check">
         <input type="checkbox" id="useTimer">
-        <span>Zapnout časový limit 10 min.</span>
+        <span>Zapnout časový limit <span class="limitMin"></span> min.</span>
       </label>
       <button class="btn btn-primary" id="startBtn">Zahájit pokus</button>
       <p style="margin:20px 0 0"><button class="btn btn-secondary" id="bankBtn" style="white-space:normal;line-height:20px">Zobrazit všechny správné odpovědi</button></p>
@@ -285,30 +59,30 @@ window.MathJax = {
       <h3 class="h">Přehled vašich předchozích pokusů</h3>
       <div class="table-wrap">
         <table class="generaltable">
-          <thead><tr><th>Pokus</th><th>Stav</th><th>Známka / 10</th><th>%</th><th>Revize</th></tr></thead>
+          <thead><tr><th>Pokus</th><th>Stav</th><th>Známka / <span class="maxGrade"></span></th><th>%</th><th>Revize</th></tr></thead>
           <tbody id="prevBody"></tbody>
         </table>
       </div>
-      <p style="text-align:center;margin:0 0 8px"><strong>Nejvyšší dosažená známka: <span id="bestGrade"></span> / 10.</strong></p>
-      <p style="text-align:center;margin:0 0 8px">Průměrná známka: <span id="avgGrade"></span> / 10 · posledních <span id="lastN"></span> pokusů: <span id="avgLast"></span> / 10</p>
+      <p style="text-align:center;margin:0 0 8px"><strong>Nejvyšší dosažená známka: <span id="bestGrade"></span> / <span class="maxGrade"></span>.</strong></p>
+      <p style="text-align:center;margin:0 0 8px">Průměrná známka: <span id="avgGrade"></span> / <span class="maxGrade"></span> · posledních <span id="lastN"></span> pokusů: <span id="avgLast"></span> / <span class="maxGrade"></span></p>
       <p style="text-align:center;margin:0 0 8px">Správně zodpovězeno celkem: <span id="totalStats"></span> úloh</p>
       <p style="text-align:center;margin:16px 0 24px"><a id="clearHistory">Smazat historii pokusů</a></p>
     </div>
   </div>
 
   <div id="bank" hidden>
-    <p style="margin:0 0 24px"><a id="bankBackTop">← Zpět na test</a></p>
+    <p style="margin:0 0 24px"><a class="backToView">← Zpět na test</a></p>
     <h2 style="font-size:30px;line-height:36px;font-weight:700;margin:0 0 8px">Všechny otázky se správnými odpověďmi</h2>
     <p style="margin:0 0 24px">Celkem <span id="bankCount"></span> otázek. Správná odpověď je vždy zeleně označena ✔.</p>
     <div id="bankQuestions"></div>
-    <p style="margin:0 0 32px"><a id="bankBackBottom">← Zpět na test</a></p>
+    <p style="margin:0 0 32px"><a class="backToView">← Zpět na test</a></p>
   </div>
 
   <div id="attempt" hidden>
     <div id="quiz-timer-wrapper" hidden>
       <div id="quiz-timer" role="timer">
         <span class="lbl">Zbývající čas</span>
-        <span id="quiz-time-left">0:10:00</span>
+        <span id="quiz-time-left">0:00:00</span>
       </div>
       <button type="button" class="btn btn-secondary" id="toggle-timer">Skrýt</button>
     </div>
@@ -340,7 +114,7 @@ window.MathJax = {
     <table class="quizreviewsummary"><tbody id="reviewSummary"></tbody></table>
     <div id="reviewQuestions"></div>
     <div class="submitbtns" style="justify-content:flex-end">
-      <a id="finishReview">Dokončit revizi</a>
+      <a class="backToView">Dokončit revizi</a>
     </div>
   </div>
 
@@ -356,593 +130,17 @@ window.MathJax = {
 <div class="modal-backdrop" id="modal" hidden>
   <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
     <div class="modal-header">
-      <h5 id="modalTitle">Odeslat vše a ukončit</h5>
+      <h5 id="modalTitle"></h5>
       <button class="close" id="modalX" aria-label="Zavřít">×</button>
     </div>
     <div class="modal-body" id="modalBody"></div>
     <div class="modal-footer">
-      <button class="btn btn-primary" id="modalOk">Odeslat vše a ukončit</button>
+      <button class="btn btn-primary" id="modalOk"></button>
       <button class="btn btn-secondary" id="modalCancel">Zrušit</button>
     </div>
   </div>
 </div>
 
-<script>
-const SNELL_IMG = "data:image/jpeg;base64,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";
-const QUESTIONS = [
-  { q: "Charakteristická impedance \\(Z_c\\) metalického vedení",
-    o: ["závisí na délce vedení, závisí na frekvenci přenášeného signálu",
-        "nezávisí na délce vedení, nezávisí na frekvenci přenášeného signálu",
-        "nezávisí na délce vedení, závisí na frekvenci přenášeného signálu",
-        "závisí na délce vedení, nezávisí na frekvenci přenášeného signálu"], c: 2 },
-
-  { q: "Přeslech je",
-    o: ["přechod části signálu z generátoru do rušeného vedení",
-        "přechod části signálu z rušeného do rušicího vedení",
-        "přechod části signálu z rušicího do rušeného vedení"], c: 2 },
-
-  { q: "Je-li \\(A\\) útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km], \\(P_{in}\\) je výkon navázaný do optického vlákna [W] a \\(P_{out}\\) je výkon detekovaný na výstupu optického vlákna [W], pak délku trasy \\(l\\) [km] lze spočítat jako:",
-    o: ["\\(l = \\frac{A}{a}\\)",
-        "\\(l = \\frac{1}{A}10\\log(\\frac{P_{in}}{P_{out}})\\)",
-        "\\(l = \\frac{a}{A}\\)",
-        "\\(l = \\frac{1}{A}10\\log(\\frac{P_{out}}{P_{in}})\\)"], c: 0 },
-
-  { q: "Při průchodu světla z prostředí opticky řidšího do prostředí opticky hustšího se světlo láme:",
-    o: ["ke kolmici vzhledem k rozhraní optického prostředí",
-        "od kolmice vzhledem k rozhraní optického prostředí"], c: 0 },
-
-  { q: "Metoda sdílení přenosového média použitím rozdílných vlnových délek pro jednotlivé kanály se označuje:",
-    o: ["WDM", "TDM", "FDM"], c: 0 },
-
-  { q: "Příčná admitance \\(Y\\) metalického vedení je dána",
-    o: ["\\(Y = R + j\\omega L\\)",
-        "\\(Y = \\sqrt{G + j\\omega C}\\)",
-        "\\(Y = \\sqrt{R + j\\omega L}\\)",
-        "\\(Y = G + j\\omega C\\)"], c: 3 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km] a \\(P_{in}\\) [W] je vstupní výkon navázaný do optického vlákna, pak výkon detekovaný na výstupu optického vlákna \\(P_{out}\\) [W] lze spočítat jako:",
-    o: ["\\(P_{out} = P_{in}10^{-\\frac{10}{A}}\\)",
-        "\\(P_{out} = P_{in}10^{\\frac{A}{10}}\\)",
-        "\\(P_{out} = P_{in}10^{-\\frac{A}{10}}\\)",
-        "\\(P_{out} = P_{in}10^{\\frac{al}{10}}\\)"], c: 2 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km] a \\(P_{in}\\) [W] je vstupní výkon navázaný do optického vlákna, pak výkon detekovaný na výstupu optického vlákna \\(P_{out}\\) [W] lze spočítat jako:",
-    o: ["\\(P_{out} = P_{in}10^{\\frac{A}{10}}\\)",
-        "\\(P_{out} = P_{in}10^{\\frac{al}{10}}\\)",
-        "\\(P_{out} = P_{in}10^{-\\frac{al}{10}}\\)"], c: 2 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km] a \\(P_{out}\\) [W] je výkon detekovaný na výstupu optického vlákna, pak vstupní výkon navázaný do optického vlákna \\(P_{in}\\) [W] lze spočítat jako:",
-    o: ["\\(P_{in} = P_{out}10^{-\\frac{A}{10}}\\)",
-        "\\(P_{in} = P_{out}10^{\\frac{10}{A}}\\)",
-        "\\(P_{in} = P_{out}10^{\\frac{A}{10}}\\)",
-        "\\(P_{in} = P_{out}10^{-\\frac{al}{10}}\\)"], c: 2 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km] a \\(P_{out}\\) [W] je výkon detekovaný na výstupu optického vlákna, pak vstupní výkon navázaný do optického vlákna \\(P_{in}\\) [W] lze spočítat jako:",
-    o: ["\\(P_{in} = P_{out}10^{\\frac{al}{10}}\\)",
-        "\\(P_{in} = P_{out}10^{-\\frac{al}{10}}\\)",
-        "\\(P_{in} = P_{out}10^{-\\frac{A}{10}}\\)"], c: 0 },
-
-  { q: "Útlum přeslechu se snažíme",
-    o: ["nebrat v úvahu", "minimalizovat", "maximalizovat"], c: 2 },
-
-  { q: "Charakteristická impedance metalického vedení \\(Z_c\\) má jednotky",
-    o: ["\\(\\sqrt{\\Omega}\\)", "\\(\\Omega/km\\)", "\\(\\sqrt{\\Omega}/km\\)",
-        "\\(\\Omega^2\\)", "\\(\\Omega\\)", "\\(\\Omega^2/km\\)"], c: 4 },
-
-  { q: "Útlum limituje:",
-    o: ["vlnovou délku", "přenosovou rychlost", "překlenutelnou vzdálenost"], c: 2 },
-
-  { q: "Módová disperze je způsobena:",
-    o: ["Rozdílnými vlnovými délkami jednotlivých módů",
-        "Rozdílnými časy šíření jednotlivých módů"], c: 1 },
-
-  { q: "Koaxiální kabely se vyznačují symetrií",
-    o: ["kapacitní", "impedanční", "napěťovou", "geometrickou", "odporovou"], c: 3 },
-
-  { q: "Módovou disperzi lze odstranit použitím:",
-    o: ["jiné modulace", "jednomódových vláken", "gradientních vláken",
-        "jiné přenosové rychlosti", "jiné vlnové délky"], c: 1 },
-
-  { q: "Je-li \\(A\\) útlum optického vlákna [dB], \\(a\\) je měrný útlum optického vlákna [dB/km], \\(P_{in}\\) je výkon navázaný do optického vlákna [W] a \\(P_{out}\\) je výkon detekovaný na výstupu optického vlákna [W], pak délku trasy \\(l\\) [km] lze spočítat jako:",
-    o: ["\\(l = \\frac{1}{A}10\\log(\\frac{P_{out}}{P_{in}})\\)",
-        "\\(l = \\frac{1}{A}10\\log(\\frac{P_{in}}{P_{out}})\\)",
-        "\\(l = \\frac{1}{a}10\\log(\\frac{P_{in}}{P_{out}})\\)"], c: 2 },
-
-  { q: "Index lomu prostředí \\(n\\) udává:",
-    o: ["kolikrát rychleji se světlo v daném prostředí šíří oproti vákuu",
-        "kolikrát pomaleji se světlo v daném prostředí šíří oproti vákuu"], c: 1 },
-
-  { q: "Symetrické kabely se vyznačují symetrií",
-    o: ["kapacitní", "napěťovou", "odporovou", "geometrickou", "impedanční"], c: 0 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(P_{in}\\) je výkon navázaný do optického vlákna [W] a \\(P_{out}\\) je výkon detekovaný na výstupu optického vlákna [W], pak měrný útlum optického vlákna \\(a\\) [dB/km] lze spočítat jako:",
-    o: ["\\(a = \\frac{A}{l}10\\log(\\frac{P_{in}}{P_{out}})\\)",
-        "\\(a = \\frac{A}{l}\\)",
-        "\\(a = \\frac{l}{A}\\)",
-        "\\(a = \\frac{1}{A}10\\log(\\frac{P_{in}}{P_{out}})\\)"], c: 1 },
-
-  { q: "Je-li \\(l\\) délka optického vlákna [km], \\(A\\) je útlum optického vlákna [dB], \\(P_{in}\\) je výkon navázaný do optického vlákna [W] a \\(P_{out}\\) je výkon detekovaný na výstupu optického vlákna [W], pak měrný útlum optického vlákna \\(a\\) [dB/km] lze spočítat jako:",
-    o: ["\\(a = \\frac{A}{l}10\\log(\\frac{P_{out}}{P_{in}})\\)",
-        "\\(a = \\frac{1}{A}10\\log(\\frac{P_{in}}{P_{out}})\\)",
-        "\\(a = \\frac{1}{l}10\\log(\\frac{P_{in}}{P_{out}})\\)"], c: 2 },
-
-  { q: "Normalizovaná frekvence je definována:",
-    o: ["\\(V = \\frac{1}{NA}\\lambda\\)",
-        "\\(V = \\pi\\frac{NA}{\\lambda}\\)",
-        "\\(V = \\frac{d\\pi}{\\lambda}NA\\)"], c: 2 },
-
-  { q: "Rayleighův rozptyl je způsoben nehomogenitami:",
-    o: ["většími než je vlnová délka", "srovnatelnými s vlnovou délkou", "menšími než je vlnová délka"], c: 2 },
-
-  { q: "Pokud není vedení zakončeno charakteristickou impedancí, dochází k",
-    o: ["přeměně signálu v teplo", "odrazům signálu zpět do vedení", "vyzáření signálu do vzduchu"], c: 1 },
-
-  { q: "Fermatův princip říká, že světlo se z bodu \\(A\\) do bodu \\(B\\) šíří tak, aby:",
-    o: ["čas šíření byl nejmenší", "uražená dráha byla největší"], c: 0 },
-
-  { q: "Podélná impedance \\(Z\\) metalického kabelu je dána",
-    o: ["\\(Z = R + j\\omega L\\)",
-        "\\(Z = \\sqrt{G + j\\omega C}\\)",
-        "\\(Z = \\sqrt{R + j\\omega L}\\)",
-        "\\(Z = G + j\\omega C\\)"], c: 0 },
-
-  { q: "Chromatická disperze je způsobena:",
-    o: ["spektrální závislostí relativního rozdílu indexů lomu",
-        "spektrální závislostí útlumu vlákna",
-        "spektrální závislostí indexu lomu",
-        "spektrální závislostí numerické apertury"], c: 2 },
-
-  { q: "Světlo se v optickém vlákně šíří na principu:",
-    o: ["Snellova zákona", "Totálního vnitřního odrazu", "Fermatova principu"], c: 1 },
-
-  { q: "Vlnová délka je vzdálenost:",
-    o: ["kterou světlo ve vakuu urazí za dobu jedné periody",
-        "mezi dvěma nejbližšími paprsky",
-        "mezi body stejné rychlosti"], c: 0 },
-
-  { q: "Snellův zákon lomu je v souvislosti s obrázkem definován jako:",
-    img: SNELL_IMG,
-    o: ["\\(n_1sin(\\varphi_2) = n_2sin(\\varphi_1)\\)",
-        "\\(n_1cos(\\varphi_1) = n_2cos(\\varphi_2)\\)",
-        "\\(n_1sin(\\varphi_1) = n_2sin(\\varphi_2)\\)",
-        "\\(n_1cos(\\varphi_2) = n_2cos(\\varphi_1)\\)"], c: 2 },
-
-  { q: "Index lomu \\(n\\) je definován jako:",
-    o: ["\\(n = vc\\)", "\\(n = \\frac{v}{c}\\)", "\\(n = \\frac{c}{v}\\)"], c: 2 },
-
-  { q: "Rayleighův rozptyl je:",
-    o: ["směrový", "všesměrový"], c: 1 },
-
-  { q: "Normalizovaná frekvence má jednotku",
-    o: ["Bezrozměrná", "\\(\\dfrac{1}{\\mathrm{s}}\\)", "\\(\\dfrac{1}{\\mathrm{Hz}}\\)", "\\(\\dfrac{\\mathrm{Hz}}{\\mathrm{km}}\\)"], c: 0 },
-
-  { q: "Je-li Z podélná impedance a Y příčná impedance metalického vedení, pak je charakteristická impedance \\(Z_C\\) dána:",
-    o: ["\\(Z_C = \\dfrac{Z}{Y}\\)", "\\(Z_C = \\sqrt{\\dfrac{Z}{Y}}\\)",
-        "\\(Z_C = \\sqrt{\\dfrac{Y}{Z}}\\)", "\\(Z_C = \\dfrac{Y}{Z}\\)"], c: 1 },
-
-  { q: "Numerickou aperturu vypočítáme:",
-    note: "V originále je jen správná odpověď – ostatní možnosti jsou doplněné.",
-    o: ["\\(NA = \\sqrt{n_1^2 - n_2^2}\\)",
-        "\\(NA = \\sqrt{n_1^2 + n_2^2}\\)",
-        "\\(NA = n_1^2 - n_2^2\\)",
-        "\\(NA = \\dfrac{n_1}{n_2}\\)"], c: 0 }
-];
-
-const FLAG_PATH = "M48 24C48 10.7 37.3 0 24 0S0 10.7 0 24V64 350.5 400v88c0 13.3 10.7 24 24 24s24-10.7 24-24V388l80.3-20.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13c12.5-4.7 20.8-16.6 20.8-30V66.1c0-23-24.2-38-44.8-27.7l-9.6 4.8c-46.3 23.2-100.8 23.2-147.1 0c-35.1-17.6-75.4-22-113.5-12.5L48 52V24zm0 77.5l96.6-24.2c27-6.7 55.5-3.6 80.4 8.8c54.9 27.4 118.7 29.7 175 6.8V334.7l-24.4 9.1c-33.7 12.6-71.2 10.7-103.4-5.4c-48.2-24.1-103.3-30.1-155.6-17.1L48 338.5v-237z";
-const FLAG_FILLED = "M64 32V64 352v128c0 17.7-14.3 32-32 32S0 497.7 0 480V352 64 32C0 14.3 14.3 0 32 0S64 14.3 64 32zm0 0l80.3-20.1c41.1-10.3 84.6-5.5 122.5 13.4c44.2 22.1 95.5 24.8 141.7 7.4l34.7-13C455.5 13.5 480 30.4 480 56V334.7c0 13.3-8.3 25.3-20.8 30l-34.7 13c-46.2 17.3-97.6 14.6-141.7-7.4c-37.9-19-81.3-23.7-122.5-13.4L64 384V64z";
-const POINTS = 2;
-const ROUND = 5;
-const LIMIT = 10 * 60;
-const LETTERS = "abcdefgh";
-
-const $ = id => document.getElementById(id);
-const fmtNum = n => n.toFixed(2).replace(".", ",");
-const MONTHS = ["ledna","února","března","dubna","května","června","července","srpna","září","října","listopadu","prosince"];
-const DAYS = ["neděle","pondělí","úterý","středa","čtvrtek","pátek","sobota"];
-const fmtDate = d => `${DAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${d.getHours()}:${String(d.getMinutes()).padStart(2,"0")}`;
-function fmtDur(sec) {
-  sec = Math.max(0, Math.round(sec));
-  const m = Math.floor(sec / 60), s = sec % 60;
-  const sw = s === 1 ? "sekunda" : (s >= 2 && s <= 4 ? "sekundy" : "sekund");
-  if (m === 0) return `${s} ${sw}`;
-  return `${m} min.` + (s ? ` ${s} ${sw}` : "");
-}
-const fmtDateReview = d => `${DAYS[d.getDay()]}, ${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}, ${String(d.getHours()).padStart(2,"0")}.${String(d.getMinutes()).padStart(2,"0")}`;
-const fmtInt = n => Number.isInteger(n) ? String(n) : fmtNum(n);
-function fmtClock(sec) {
-  sec = Math.max(0, sec);
-  const h = Math.floor(sec / 3600), m = Math.floor(sec % 3600 / 60), s = sec % 60;
-  return `${h}:${String(m).padStart(2,"0")}:${String(s).padStart(2,"0")}`;
-}
-
-function shuffle(a) {
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-}
-
-let deck = [];
-function draw(n) {
-  const out = [];
-  while (out.length < n) {
-    if (!deck.length) {
-      deck = shuffle(QUESTIONS.map((_, i) => i)).filter(i => !out.includes(i));
-      if (!deck.length) break;
-    }
-    out.push(deck.pop());
-  }
-  saveStore();
-  return out;
-}
-
-function typeset(el) {
-  if (window.MathJax && MathJax.typesetPromise) {
-    MathJax.typesetPromise([el]).catch(() => {});
-  } else {
-    setTimeout(() => typeset(el), 150);
-  }
-}
-
-let attempt = null;
-const history = [];
-const STORE_KEY = "kviz-historie-v2";
-
-function saveStore() {
-  try {
-    const data = {
-      deck,
-      history: history.map(h => ({
-        start: h.attempt.start.getTime(), end: h.attempt.end.getTime(),
-        timed: h.attempt.timed, score: h.score, max: h.attempt.max,
-        items: h.attempt.items.map(it => ({ qi: it.qi, order: it.order, picked: it.picked, flagged: it.flagged }))
-      }))
-    };
-    localStorage.setItem(STORE_KEY, JSON.stringify(data));
-  } catch (e) {}
-}
-
-function loadStore() {
-  try {
-    const raw = localStorage.getItem(STORE_KEY);
-    if (!raw) return;
-    const data = JSON.parse(raw);
-    if (Array.isArray(data.deck)) deck = data.deck.filter(i => Number.isInteger(i) && i >= 0 && i < QUESTIONS.length);
-    for (const h of data.history || []) {
-      if (!h.items || h.items.some(it => !QUESTIONS[it.qi] || it.order.length !== QUESTIONS[it.qi].o.length)) continue;
-      const attempt = {
-        items: h.items.map(it => ({ ...it, checked: true })),
-        start: new Date(h.start), end: new Date(h.end),
-        timed: !!h.timed, deadline: null, finished: true,
-        score: h.score, max: h.max
-      };
-      history.push({ attempt, end: attempt.end, score: h.score, grade: h.score / h.max * 100 });
-    }
-  } catch (e) {}
-}
-
-function clearStore() {
-  history.length = 0;
-  try { localStorage.removeItem(STORE_KEY); } catch (e) {}
-  $("prevAttempts").hidden = true;
-  renderView();
-}
-let timerId = null;
-let timerHidden = false;
-
-function show(view) {
-  for (const v of ["view", "attempt", "summary", "review", "bank"]) $(v).hidden = v !== view;
-  $("navblock").hidden = view === "view" || view === "bank";
-  window.scrollTo(0, 0);
-}
-
-function renderView() {
-  $("bankSize").textContent = QUESTIONS.length;
-  $("startBtn").textContent = history.length ? "Zkusit test znovu" : "Zahájit pokus";
-  $("limitInfo").hidden = !$("useTimer").checked;
-  if (history.length) {
-    $("prevAttempts").hidden = false;
-    $("prevBody").innerHTML = history.map((h, i) =>
-      `<tr><td>${i + 1}</td><td>Dokončeno<br><span style="font-size:14px">${h.end.getDate()}. ${h.end.getMonth()+1}. ${h.end.getFullYear()}, ${h.end.getHours()}:${String(h.end.getMinutes()).padStart(2,"0")}</span></td>` +
-      `<td>${fmtInt(Math.round(h.grade) / 10)}</td><td>${Math.round(h.grade)} %</td><td><a data-rev="${i}">Revize</a></td></tr>`
-    ).join("");
-    $("prevBody").querySelectorAll("a[data-rev]").forEach(a =>
-      a.addEventListener("click", () => { attempt = history[+a.dataset.rev].attempt; renderReview(); }));
-    $("bestGrade").textContent = fmtInt(Math.max(...history.map(h => h.grade)) / 10);
-    const avg = history.reduce((s, h) => s + h.grade, 0) / history.length;
-    const last = history.slice(-10);
-    const avgLast = last.reduce((s, h) => s + h.grade, 0) / last.length;
-    const totalQ = history.reduce((s, h) => s + h.attempt.items.length, 0);
-    const totalOk = history.reduce((s, h) => s + h.attempt.items.filter(it => it.picked === QUESTIONS[it.qi].c).length, 0);
-    $("avgGrade").textContent = fmtNum(avg / 10);
-    $("avgLast").textContent = fmtNum(avgLast / 10);
-    $("lastN").textContent = last.length;
-    $("totalStats").textContent = `${totalOk} z ${totalQ}`;
-  }
-  show("view");
-}
-
-function startAttempt() {
-  const timed = $("useTimer").checked;
-  const now = new Date();
-  attempt = {
-    items: draw(ROUND).map(qi => ({
-      qi, order: shuffle(QUESTIONS[qi].o.map((_, i) => i)),
-      picked: null, checked: false, flagged: false
-    })),
-    start: now, end: null, timed,
-    deadline: timed ? new Date(now.getTime() + LIMIT * 1000) : null,
-    finished: false
-  };
-  renderAttempt();
-  $("quiz-timer-wrapper").hidden = !timed;
-  timerHidden = false;
-  $("quiz-timer").classList.remove("hidden-time");
-  $("toggle-timer").textContent = "Skrýt";
-  if (timed) startTimer();
-}
-
-function itemState(it) {
-  const Q = QUESTIONS[it.qi];
-  if (it.checked || attempt.finished) {
-    if (it.picked === null) return "notanswered";
-    return it.picked === Q.c ? "correct" : "incorrect";
-  }
-  return it.picked === null ? "notyetanswered" : "answersaved";
-}
-function stateText(st) {
-  return { notyetanswered: "Dosud nezodpovězeno", answersaved: "Odpověď uložena",
-           correct: "Správně", incorrect: "Nesprávně", notanswered: "Nezodpovězeno" }[st];
-}
-function gradeText(it, st) {
-  if (st === "correct") return `Bodů ${POINTS} / ${POINTS}`;
-  if (st === "incorrect" || st === "notanswered") return `Bodů 0 / ${POINTS}`;
-  return `Počet bodů z ${POINTS}`;
-}
-
-function questionHTML(it, idx, mode) {
-  const Q = QUESTIONS[it.qi];
-  const bank = mode === "bank";
-  const st = bank ? "bank" : itemState(it);
-  const locked = bank || mode === "review" || it.checked;
-  const name = `q${idx}`;
-  const flagSvg = `<svg viewBox="0 0 ${it.flagged ? 512 : 448} 512" aria-hidden="true"><path d="${it.flagged ? FLAG_FILLED : FLAG_PATH}"/></svg>`;
-  const flagHTML = bank ? "" : mode === "review"
-    ? (it.flagged ? `<div class="questionflag flagged"><a>${flagSvg}Úloha s vlaječkou</a></div>` : ``)
-    : `<div class="questionflag${it.flagged ? " flagged" : ""}"><a role="button" tabindex="0" data-flag="${idx}" title="Označení testové úlohy vlaječkou pro další použití">${flagSvg}${it.flagged ? "Odebrat vlaječku" : "Úloha s vlaječkou"}</a></div>`;
-
-  let html = `<div class="que multichoice ${st}" id="question-${idx}">
-    <div class="info">
-      <h3 class="no">Úloha <span class="qno">${idx + 1}</span></h3>
-      ${bank ? "" : `<div class="state">${stateText(st)}</div>
-      <div class="grade">${gradeText(it, st)}</div>`}
-      ${flagHTML}
-    </div>
-    <div class="content">
-      <div class="formulation">
-        <div class="qtext">${Q.note ? `<p class="note-orig">${Q.note}</p>` : ""}<p>${Q.q}</p>${Q.img ? `<img src="${Q.img}" alt="">` : ""}</div>
-        <fieldset class="ablock">
-          ${bank ? "" : `<legend>Vyberte jednu z nabízených možností:</legend>`}
-          <div class="answer">`;
-  it.order.forEach((oi, k) => {
-    const isPicked = it.picked === oi;
-    let cls = `r${k % 2}`, icon = "";
-    if (locked && isPicked) {
-      cls += oi === Q.c ? " correct" : " incorrect";
-      icon = oi === Q.c ? `<span class="icon ok" title="Správně">✔</span>` : `<span class="icon bad" title="Nesprávně">✖</span>`;
-    } else if (locked && oi === Q.c) {
-      cls += " correct";
-      icon = `<span class="icon ok" title="Správná odpověď">✔</span>`;
-    }
-    const id = `${name}_a${oi}`;
-    html += `<div class="${cls}">
-      <input type="radio" name="${name}" id="${id}" value="${oi}" ${isPicked ? "checked" : ""} ${locked ? "disabled" : ""}>
-      <label class="lbl d-flex" for="${id}"><span class="answernumber">${LETTERS[k]}. </span><div class="flex-fill">${Q.o[oi]}</div></label>${icon}
-    </div>`;
-  });
-  html += `</div>`;
-  if (!locked && it.picked !== null) {
-    html += `<div class="clearchoice"><a data-clear="${idx}">Zrušit mou volbu</a></div>`;
-  }
-  html += `</fieldset></div>`;
-
-  if (locked && !bank) {
-    const right = Q.o[Q.c];
-    let fb = "";
-    if (st === "correct") fb = `<div>Vaše odpověď je správná.</div>`;
-    else if (st === "incorrect") fb = `<div>Vaše odpověď je nesprávná.</div>`;
-    html += `<div class="outcome clearfix"><h4 style="position:absolute;left:-9999px">Zpětná vazba</h4><div class="feedback">${fb}<div class="rightanswer">Správná odpověď je: ${right}</div></div></div>`;
-  }
-  html += `</div></div>`;
-  return html;
-}
-
-function bindQuestion(root, idx) {
-  const it = attempt.items[idx];
-  root.querySelectorAll(`input[name="q${idx}"]`).forEach(inp => {
-    inp.addEventListener("change", () => {
-      it.picked = +inp.value;
-      rerenderQuestion(idx, false);
-    });
-  });
-  const clr = root.querySelector("[data-clear]");
-  if (clr) clr.addEventListener("click", () => { it.picked = null; rerenderQuestion(idx, false); });
-  const fl = root.querySelector("[data-flag]");
-  if (fl) {
-    const toggle = () => { it.flagged = !it.flagged; rerenderQuestion(idx, false); };
-    fl.addEventListener("click", toggle);
-    fl.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); } });
-  }
-}
-
-function rerenderQuestion(idx, keepFocus) {
-  const old = $(`question-${idx}`);
-  const tmp = document.createElement("div");
-  tmp.innerHTML = questionHTML(attempt.items[idx], idx, "attempt");
-  const fresh = tmp.firstElementChild;
-  old.replaceWith(fresh);
-  bindQuestion(fresh, idx);
-  typeset(fresh);
-  renderNav("attempt");
-  const sel = fresh.querySelector("input:checked");
-  if (sel && !sel.disabled) sel.focus({ preventScroll: true });
-}
-
-function renderAttempt() {
-  const wrap = $("questions");
-  wrap.innerHTML = attempt.items.map((it, i) => questionHTML(it, i, "attempt")).join("");
-  attempt.items.forEach((_, i) => bindQuestion($(`question-${i}`), i));
-  typeset(wrap);
-  renderNav("attempt");
-  show("attempt");
-}
-
-function renderNav(mode) {
-  $("qnButtons").innerHTML = attempt.items.map((it, i) => {
-    const st = itemState(it);
-    const cls = ["qnbutton", st, it.flagged ? "flagged" : "", mode !== "summary" ? "thispage" : ""].join(" ");
-    return `<a class="${cls}" data-nav="${i}" title="Úloha ${i + 1} - ${stateText(st)}"><span class="thispageholder"></span><span class="trafficlight"></span><span class="num">${i + 1}</span></a>`;
-  }).join("");
-  $("qnButtons").querySelectorAll("[data-nav]").forEach(a => a.addEventListener("click", () => {
-    const i = +a.dataset.nav;
-    if (mode === "summary") { show("attempt"); renderNav("attempt"); }
-    const prefix = mode === "review" ? "rq-" : "question-";
-    const el = $(prefix + i);
-    if (el) {
-      const y = el.getBoundingClientRect().top + window.scrollY - 90 - (attempt.timed && mode !== "review" ? 50 : 0);
-      window.scrollTo({ top: y, behavior: "smooth" });
-    }
-  }));
-  if (mode === "review") {
-    $("othernav").innerHTML = `<a id="navFinishReview">Dokončit revizi</a>`;
-    $("navFinishReview").addEventListener("click", renderView);
-  } else {
-    $("othernav").innerHTML = `<a class="endtestlink" id="endLink">Konec testu…</a>`;
-    $("endLink").addEventListener("click", renderSummary);
-  }
-}
-
-function startTimer() {
-  stopTimer();
-  const tick = () => {
-    const left = Math.round((attempt.deadline - Date.now()) / 1000);
-    $("quiz-time-left").textContent = fmtClock(left);
-    $("summaryTimeLeft").textContent = fmtClock(left);
-    const t = $("quiz-timer");
-    for (let i = 0; i <= 10; i++) t.classList.remove("t" + i);
-    if (left <= 100) t.classList.add("t" + Math.max(0, Math.min(10, Math.floor(left / 10))));
-    if (left <= 0) { stopTimer(); finishAttempt(); }
-  };
-  tick();
-  timerId = setInterval(tick, 1000);
-}
-function stopTimer() { if (timerId) clearInterval(timerId); timerId = null; }
-
-$("toggle-timer").addEventListener("click", () => {
-  timerHidden = !timerHidden;
-  $("quiz-timer").classList.toggle("hidden-time", timerHidden);
-  $("toggle-timer").textContent = timerHidden ? "Zobrazit" : "Skrýt";
-});
-
-function renderSummary() {
-  $("summaryBody").innerHTML = attempt.items.map((it, i) => {
-    const st = itemState(it);
-    const flag = it.flagged ? ` <svg viewBox="0 0 512 512" width="13" height="16" style="vertical-align:-2px"><path fill="#ca3120" d="${FLAG_FILLED}"/></svg>` : "";
-    return `<tr><td><a data-go="${i}">${i + 1}</a>${flag}</td><td>${stateText(st)}</td></tr>`;
-  }).join("");
-  $("summaryBody").querySelectorAll("[data-go]").forEach(a => a.addEventListener("click", () => {
-    show("attempt"); renderNav("attempt");
-    const el = $(`question-${a.dataset.go}`);
-    window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 140 });
-  }));
-  $("summaryTimer").hidden = !attempt.timed;
-  const due = attempt.deadline || new Date(attempt.start.getTime() + 7 * 24 * 3600 * 1000);
-  $("dueText").textContent = fmtDate(due);
-  renderNav("summary");
-  show("summary");
-}
-
-$("backToAttempt").addEventListener("click", () => { show("attempt"); renderNav("attempt"); });
-$("finishBtn").addEventListener("click", renderSummary);
-
-let modalAction = null;
-function openModal() {
-  $("modalTitle").textContent = "Odeslat vše a ukončit";
-  $("modalOk").textContent = "Odeslat vše a ukončit";
-  modalAction = finishAttempt;
-  const unanswered = attempt.items.filter(it => it.picked === null).length;
-  $("modalBody").innerHTML = `<p style="margin:0 0 8px">Jakmile odešlete své odpovědi, již je nebudete moci změnit.</p>` +
-    (unanswered ? `<p style="margin:0">Úlohy bez odpovědi: ${unanswered}</p>` : "");
-  $("modal").hidden = false;
-  $("modalOk").focus();
-}
-function closeModal() { $("modal").hidden = true; }
-$("submitAll").addEventListener("click", openModal);
-$("modalCancel").addEventListener("click", closeModal);
-$("modalX").addEventListener("click", closeModal);
-$("modal").addEventListener("click", e => { if (e.target === $("modal")) closeModal(); });
-$("modalOk").addEventListener("click", () => { closeModal(); if (modalAction) modalAction(); });
-
-function finishAttempt() {
-  if (attempt.finished) return;
-  stopTimer();
-  attempt.finished = true;
-  attempt.end = new Date();
-  const correct = attempt.items.filter(it => it.picked === QUESTIONS[it.qi].c).length;
-  const score = correct * POINTS;
-  const max = attempt.items.length * POINTS;
-  attempt.score = score; attempt.max = max;
-  history.push({ attempt, end: attempt.end, score, grade: score / max * 100 });
-  saveStore();
-  renderReview();
-}
-
-function renderReview() {
-  const a = attempt;
-  const pct = Math.round(a.score / a.max * 100);
-  $("reviewSummary").innerHTML = [
-    ["Stav", "Dokončeno"],
-    ["Zahájení", fmtDateReview(a.start)],
-    ["Dokončeno", fmtDateReview(a.end)],
-    ["Trvání", fmtDur((a.end - a.start) / 1000)],
-    ["Známka", `${fmtInt(a.score)} z možných ${fmtInt(a.max)} (<b>${pct}%</b>)`]
-  ].map(([k, v]) => `<tr><th class="cell" scope="row">${k}</th><td class="cell">${v}</td></tr>`).join("");
-  const wrap = $("reviewQuestions");
-  wrap.innerHTML = a.items.map((it, i) => questionHTML(it, i, "review").replace(`id="question-${i}"`, `id="rq-${i}"`)).join("");
-  typeset(wrap);
-  renderNav("review");
-  show("review");
-}
-$("finishReview").addEventListener("click", renderView);
-
-$("useTimer").addEventListener("change", () => { $("limitInfo").hidden = !$("useTimer").checked; });
-$("startBtn").addEventListener("click", startAttempt);
-let bankRendered = false;
-function renderBank() {
-  if (!bankRendered) {
-    $("bankCount").textContent = QUESTIONS.length;
-    const wrap = $("bankQuestions");
-    wrap.innerHTML = QUESTIONS.map((Q, qi) =>
-      questionHTML({ qi, order: Q.o.map((_, i) => i), picked: null, flagged: false }, qi, "bank")
-        .replace(`id="question-${qi}"`, `id="bq-${qi}"`)).join("");
-    typeset(wrap);
-    bankRendered = true;
-  }
-  show("bank");
-}
-$("bankBtn").addEventListener("click", renderBank);
-$("bankBackTop").addEventListener("click", renderView);
-$("bankBackBottom").addEventListener("click", renderView);
-$("clearHistory").addEventListener("click", () => {
-  $("modalTitle").textContent = "Smazat historii pokusů";
-  $("modalBody").innerHTML = `<p style="margin:0">Opravdu chcete smazat všechny uložené pokusy? Tuto akci nelze vrátit.</p>`;
-  $("modalOk").textContent = "Smazat";
-  modalAction = clearStore;
-  $("modal").hidden = false;
-});
-loadStore();
-renderView();
-</script>
+<script src="js/app.js"></script>
 </body>
 </html>
