@@ -164,12 +164,12 @@ function solutionHTML(q) {
     return `<b>Řešení:</b><ol>
       <li>Četnosti v šifře: ${top} → nejčastější <b>${t.mostCipher}</b>.</li>
       <li>${t.mostCipher} odpovídá v původním textu písmenu <b>${t.mostPlain}</b> → posun = ${t.mostCipher}(${ABC.indexOf(t.mostCipher)}) − ${t.mostPlain}(${ABC.indexOf(t.mostPlain)}) = <b>${t.k}</b> (mod 26).</li>
-      <li>Cryptii → Caesar cipher → Decode, Shift ${t.k} → <b>${t.plain}</b>.</li></ol>`;
+      <li>Cryptii: DECODE, TEXT do levého okna, SHIFT ${t.k} → vpravo <b>${t.plain}</b>.</li></ol>`;
   }
   const rows = [...t.word].map((c, i) => `<tr><td>${c}</td><td>${t.codes[i]}</td><td>${t.codes[i]}<sup>${t.keys.e}</sup> mod ${t.keys.n}</td><td><b>${t.cips[i]}</b></td></tr>`).join("");
   return `<b>Řešení:</b> c = m<sup>e</sup> mod n
     <div class="table-wrap"><table class="generaltable sol-table"><thead><tr><th>znak</th><th>m (ASCII)</th><th>výpočet</th><th>c</th></tr></thead><tbody>${rows}</tbody></table></div>
-    <p>WolframAlpha: <code>PowerMod[{${t.codes.join(",")}},${t.keys.e},${t.keys.n}]</code></p>`;
+    <p>WolframAlpha: <code>PowerMod[{${t.codes.join(",")}},${t.keys.e},${t.keys.n}]</code> → {${t.cips.join(", ")}}</p>`;
 }
 
 function submit() {

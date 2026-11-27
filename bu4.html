@@ -25,42 +25,39 @@
       <p class="guide-lead">Opiš si tohle na A4. V testu jdeš shora dolů, otázka po otázce.</p>
       <pre class="a4">═══ ÚLOHA 1 – CAESAR ═══════════════════════
 
-① Nejčastější znak? (1b)
-   na papír si napiš abecedu do řádku:
-      A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
-   jeď TEXTEM písmeno po písmenu → pod každé dej čárku |
-   → odpověď = písmeno s nejvíc čárkami   (~1 minuta)
+① Nejčastější znak (1b)
+   napiš si na papír:
+   A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+   jeď TEXTEM a pod každé písmeno udělej čárku |
+   ODPOVĚĎ = písmeno s nejvíc čárkami
 
 ② Dešifrovaný text (3b)
-   cryptii.com → Caesar cipher → přepni DECODE
-   → vlož TEXT
-   → Shift = (nejčastější) − E    ← čísla z tabulky
-        vyjde záporné? přičti 26
-   → nedává to smysl? místo E zkus A, pak O, I, N
-   → pořád nic? klikej Shift 1, 2, 3 … až je věta
-   → odpověď = věta VELKÝMI BEZ MEZER
+   1. otevři cryptii.com/pipes/caesar-cipher
+   2. v prostředním okně nahoře klikni DECODE
+   3. do LEVÉHO okna vlož TEXT z testu
+   4. u SHIFT klikej + nebo −
+      a koukej do PRAVÉHO okna
+   5. vpravo je česká věta → hotovo
+   ODPOVĚĎ = text z PRAVÉHO okna (velkými, bez mezer)
 
 ③ Posun (1b)
-   → odpověď = číslo Shift z Cryptii
-
-   A0 B1 C2 D3 E4 F5 G6 H7 I8 J9 K10 L11 M12
-   N13 O14 P15 Q16 R17 S18 T19 U20 V21 W22 X23 Y24 Z25
-   příklad: nejčastější M → M12 − E4 = 8 → Shift 8
+   ODPOVĚĎ = číslo u SHIFT
 
 ═══ ÚLOHA 2 – RSA ═══════════════════════════
 
-① Číselné vyjádření UTF-8 (2b)
+① UTF-8 (2b)
    každé písmeno přepiš na číslo:
    A65 B66 C67 D68 E69 F70 G71 H72 I73 J74 K75 L76 M77
    N78 O79 P80 Q81 R82 S83 T84 U85 V86 W87 X88 Y89 Z90
-   → odpověď = čísla BEZ MEZER   (AHOJ → 65727974)
+   ODPOVĚĎ = čísla za sebou bez mezer
+   např. AHOJ → 65 72 79 74 → 65727974
 
 ② Zašifrovaný text (3b)
-   wolframalpha.com → napiš:
-      PowerMod[{65,72,79,74}, e, n]
-        čísla z ①      e a n = VEŘEJNÝ klíč (e,n)
-                       NE privátní d !!!
-   → vyleze {…} → odpověď = čísla BEZ MEZER A ČÁREK</pre>
+   do wolframalpha.com napiš:
+      PowerMod[{65,72,79,74},7,187]
+      {čísla z ① s čárkami}, e, n   ← e,n = Veřejný klíč
+   vyjde {142, 30, 139, 167}
+   ODPOVĚĎ = 14230139167   (za sebou, bez mezer a čárek)</pre>
     </div>
   </details>
 
