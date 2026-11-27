@@ -130,9 +130,32 @@ function render() {
   $("buNew").hidden = true;
   done = false;
   startTime = Date.now();
+  startTimer();
 }
 
-let startTime = 0;
+let startTime = 0, timerId = null, timerHidden = false;
+const LIMIT = 20 * 60;
+
+function clock(sec) {
+  sec = Math.max(0, sec);
+  return `${Math.floor(sec / 3600)}:${String(Math.floor(sec % 3600 / 60)).padStart(2, "0")}:${String(sec % 60).padStart(2, "0")}`;
+}
+function stopTimer() { if (timerId) clearInterval(timerId); timerId = null; }
+function startTimer() {
+  stopTimer();
+  const deadline = Date.now() + LIMIT * 1000;
+  const el = $("quiz-timer");
+  const tick = () => {
+    const left = Math.round((deadline - Date.now()) / 1000);
+    $("quiz-time-left").textContent = clock(left);
+    for (let i = 0; i <= 10; i++) el.classList.remove("t" + i);
+    if (left <= 100) el.classList.add("t" + Math.max(0, Math.min(10, Math.floor(left / 10))));
+    if (left <= 0) submit();
+  };
+  tick();
+  timerId = setInterval(tick, 1000);
+  $("quiz-timer-wrapper").hidden = false;
+}
 
 function solutionHTML(q) {
   const t = task;
@@ -152,6 +175,8 @@ function solutionHTML(q) {
 function submit() {
   if (done) return;
   done = true;
+  stopTimer();
+  $("quiz-timer-wrapper").hidden = true;
   const score = { 1: 0, 2: 0 };
   for (const f of FIELDS) {
     const inp = $(f.id);
@@ -187,6 +212,11 @@ function submit() {
 }
 
 $("buSubmit").addEventListener("click", submit);
+$("toggle-timer").addEventListener("click", () => {
+  timerHidden = !timerHidden;
+  $("quiz-timer").classList.toggle("hidden-time", timerHidden);
+  $("toggle-timer").textContent = timerHidden ? "Zobrazit" : "Skrýt";
+});
 $("buNew").addEventListener("click", () => { task = generate(); render(); window.scrollTo(0, 0); });
 task = generate();
 render();
