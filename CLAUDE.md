@@ -11,6 +11,8 @@ překvapený prostředím. Běží na GitHub Pages, žádný build, žádné zá
 - `tests/<id>.js` – data jednoho testu (viz formát níže).
 - `img/<id>/` – obrázky k otázkám daného testu.
 - `tools/check.js` – kontrola dat: `node tools/check.js`.
+- `bu4.html` + `js/bu4.js` – cvičná Bodovaná úloha 4 (Caesar + RSA) s náhodně generovanými texty a návodem;
+  odkaz je v `index.html` v sekci „Bodované úlohy“. Vypadá jako výpočtová úloha z Moodlu (textová pole, body po polích).
 
 Routing přes hash: `index.html` = seznam testů, `index.html#test-2` = konkrétní test.
 Obrazovky uvnitř testu (banka, pokus, souhrn, revize) mají vlastní záznam v historii prohlížeče (`history.state.sub`),

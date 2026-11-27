@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bodovaná úloha 4 - Šifry 2026 (procvičování)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<nav class="navbar" aria-label="Navigace stránek"></nav>
+
+<div id="page">
+  <header class="page-header">
+    <p class="breadcrumb"><a href="index.html">← Všechny testy</a></p>
+    <h1>Bodovaná úloha 4 - Šifry 2026 (procvičování)</h1>
+  </header>
+
+  <details class="guide">
+    <summary>Návod jak na to</summary>
+    <div class="guide-body">
+      <p class="guide-tools">Povoleno: 1× A4 ručně psaná · <a href="https://www.wolframalpha.com" target="_blank" rel="noopener">WolframAlpha</a> · <a href="https://cryptii.com/pipes/caesar-cipher" target="_blank" rel="noopener">Cryptii</a> · ASCII tabulka</p>
+      <p class="guide-lead">Opiš si tohle na A4 <b>přesně takhle</b>. V testu jdeš shora dolů, otázka po otázce.</p>
+      <pre class="a4">═══ ÚLOHA 1 – CAESAR ═══════════════════════
+
+① Nejčastější znak? (1b)
+   wolframalpha.com → napiš:
+      Commonest[Characters["SEM VLOŽ TEXT"]]
+   → odpověď = to písmeno, co vyleze
+
+② Dešifrovaný text (3b)
+   cryptii.com → Caesar cipher → přepni DECODE
+   → vlož TEXT
+   → Shift = (nejčastější) − E    ← čísla z tabulky
+        vyjde záporné? přičti 26
+   → nedává to smysl? místo E zkus A, pak O, I, N
+   → pořád nic? klikej Shift 1, 2, 3 … až je věta
+   → odpověď = věta VELKÝMI BEZ MEZER
+
+③ Posun (1b)
+   → odpověď = číslo Shift z Cryptii
+
+   A0 B1 C2 D3 E4 F5 G6 H7 I8 J9 K10 L11 M12
+   N13 O14 P15 Q16 R17 S18 T19 U20 V21 W22 X23 Y24 Z25
+   příklad: nejčastější M → M12 − E4 = 8 → Shift 8
+
+═══ ÚLOHA 2 – RSA ═══════════════════════════
+
+① Číselné vyjádření UTF-8 (2b)
+   každé písmeno přepiš na číslo:
+   A65 B66 C67 D68 E69 F70 G71 H72 I73 J74 K75 L76 M77
+   N78 O79 P80 Q81 R82 S83 T84 U85 V86 W87 X88 Y89 Z90
+   → odpověď = čísla BEZ MEZER   (AHOJ → 65727974)
+
+② Zašifrovaný text (3b)
+   wolframalpha.com → napiš:
+      PowerMod[{65,72,79,74}, e, n]
+        čísla z ①      e a n = VEŘEJNÝ klíč (e,n)
+                       NE privátní d !!!
+   → vyleze {…} → odpověď = čísla BEZ MEZER A ČÁREK</pre>
+    </div>
+  </details>
+
+  <div id="buSummaryWrap" hidden>
+    <table class="quizreviewsummary"><tbody id="buSummary"></tbody></table>
+  </div>
+
+  <div id="buQuestions"></div>
+
+  <div class="submitbtns">
+    <button type="button" class="btn btn-primary" id="buSubmit">Odeslat vše a ukončit</button>
+    <button type="button" class="btn btn-primary" id="buNew" hidden>Nový pokus (jiné texty)</button>
+  </div>
+</div>
+
+<script src="js/bu4.js"></script>
+</body>
+</html>
